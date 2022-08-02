@@ -59,9 +59,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
+import { login1 } from '@/api/dev'
 
 export default {
   name: 'Login',
@@ -83,8 +83,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'lincheng',
+        password: '960526'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -142,36 +142,23 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
           //表单校验通过，发送异步请求进行登录，并且将表单参数携带到服务器
+          this.loading = true
           //要提交的请求参数
-        //   axios.post("http://43.132.153.130:8889/ymh-ems-test/login/loginIn", this.loginForm).then(response=>{
-        //       if (response.data.success) {
-        //         // alert(12312313)
-        //           this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-        //           console.log("--------------------------------");
-        //           console.log(this.otherQuery);
-        //           console.log("--------------------------------");
-        //           console.log(this.redirect);
-        //             this.loading = false    
-        //       }else {
-        //           //登录失败
-        //           this.form.info = response.data.msg;
-        //       }
-        //   }).catch(()=>{
-        //       this.loading = false
-        //   })
-        // } else {
-        //   console.log('error submit!!')
-        //   return false
+          login1(this.loginForm).then(response => {
+            if (response.success) {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery });
+              this.loading = false
+            } else {
+              //登录失败
+              this.form.info = response.data.msg;
+            }
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
       })
     },

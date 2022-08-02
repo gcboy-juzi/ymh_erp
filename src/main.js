@@ -15,7 +15,8 @@ import store from './store'
 import router from './router'
 
 import './icons' // icon
-import './permission' // permission control
+// 权限管控(暂时解除)
+// import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
